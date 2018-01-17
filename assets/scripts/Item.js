@@ -8,6 +8,8 @@
 //  - [Chinese] http://www.cocos.com/docs/creator/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/life-cycle-callbacks/index.html
 
+import Model from './Model'
+
 cc.Class({
     extends: cc.Component,
 
@@ -27,21 +29,20 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
+        chessAtlas: cc.SpriteAtlas
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-
+    onLoad() {
     },
 
-    start () {
-
+    start() {
     },
 
-    // setHighlight() {
-    //     console.warn('ahihi')
-    // }
+    setSpriteFrame(spriteName) {
+        this.node.getComponent(cc.Sprite).spriteFrame = this.chessAtlas.getSpriteFrame(spriteName)
+    }
 
     // update (dt) {},
 });

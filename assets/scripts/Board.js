@@ -8,11 +8,14 @@
 //  - [Chinese] http://www.cocos.com/docs/creator/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/life-cycle-callbacks/index.html
 
+import Model from './Model'
+
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        cell: cc.Node
+        cell: cc.Node,
+        item: cc.Node,
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -33,35 +36,49 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        this.coordinateCell = null
+        this.coordinateItem = null
     },
 
     start() {
         this._initCells()
+        this._initItem()
     },
 
     _initCells() {
-        let coordinate = new Map()
-        for (i = 0; i < 8; i++) {
-            for (j = 0; j < 8; j++) {
+        let coordinateCell = new Map()
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
                 let item = cc.instantiate(this.cell)
                 item.active = true
-                let symbolMap = this.__setSymbol()
-                const symbol = symbolMap.get(i)
-                const coordinateSymbol = `symbol-${j+1}`
-                const cellPosition = item.getPosition()
                 this.node.addChild(item)
-                coordinate.set(coordinateSymbol, cellPosition)
+                const {symbolMap} = Model
+                const symbol = symbolMap.get(i)
+                const coordinateUnit = [i, j]
+                const coordinateSymbol = `${symbol}-${j + 1}`
+                let cell = item.getComponent('Cell')
+                cell.coordinateSymbol = coordinateSymbol
+                coordinateCell.set(coordinateUnit, item)
             }
         }
+        this.node.getComponent(cc.Layout).destroy()
+        this.coordinateCell = coordinateCell
     },
 
-    _setSymbol() {
-        let symbolMap = new Map()
-        let symbolArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-        for (i = 0; i < 8; i++) {
-            symbolMap.set(i, symbolArray[i])
+    _initItem() {
+        const {coordinateItemModel, itemTypeMap} = Model
+        for (let [coordinate, itemProp] of coordinateItemModel.entries()) {
+            let {type, team} = itemProp
+            let chessItem = cc.instantiate(this.item)
+            const position = this.coordinateCell.get(coordinate).getPosition()
+            chessItem.setPosition(position)
+            let item = chessItem.getComponent('Item')
+            const spriteName = `${itemTypeMap.get(type)}-${team}`
+            item.setSpriteFrame(spriteName)
+            item.type = type
+            item.team = team
+            
         }
-        return symbolMap
     }
 
     // update (dt) {},
