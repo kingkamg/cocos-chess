@@ -12,6 +12,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        cell: cc.Node
         // foo: {
         //     // ATTRIBUTES:
         //     default: null,        // The default value will be used only when the component attaching
@@ -31,14 +32,36 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
-
-    start () {
-
+    onLoad() {
     },
 
-    onCellBtnClicked() {
-        console.warn('ahihi')
+    start() {
+        this._initCells()
+    },
+
+    _initCells() {
+        let coordinate = new Map()
+        for (i = 0; i < 8; i++) {
+            for (j = 0; j < 8; j++) {
+                let item = cc.instantiate(this.cell)
+                item.active = true
+                let symbolMap = this.__setSymbol()
+                const symbol = symbolMap.get(i)
+                const coordinateSymbol = `symbol-${j+1}`
+                const cellPosition = item.getPosition()
+                this.node.addChild(item)
+                coordinate.set(coordinateSymbol, cellPosition)
+            }
+        }
+    },
+
+    _setSymbol() {
+        let symbolMap = new Map()
+        let symbolArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        for (i = 0; i < 8; i++) {
+            symbolMap.set(i, symbolArray[i])
+        }
+        return symbolMap
     }
 
     // update (dt) {},
