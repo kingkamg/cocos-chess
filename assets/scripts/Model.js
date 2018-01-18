@@ -7,7 +7,7 @@ const getSymbolMap = () => {
     return symbolMap
 }
 
-const itemTypeMap = new Map([[1, 'xe'], [2, 'ma'], [3, 'tinh'], [4, 'hau'], [5, 'vua'], [6, 'tot']])
+const itemTypeMap = new Map([[1, 'xe'], [2, 'ma'], [3, 'tinh'], [4, 'hau'], [5, 'tuong'], [6, 'tot']])
 const arrangement = [1, 2, 3, 4, 5, 3, 2, 1]
 
 const getCoordinateItemModel = () => {
@@ -38,7 +38,7 @@ const getCoordinateItemModel = () => {
                 coordinate: {
                     i, j: 6,
                 },
-                type: itemTypeWhite,
+                type: 6,
                 team: 'trang'
             }
         )
@@ -47,7 +47,7 @@ const getCoordinateItemModel = () => {
                 coordinate: {
                     i, j: 7,
                 },
-                type: 6,
+                type: itemTypeWhite,
                 team: 'trang'
             }
         )

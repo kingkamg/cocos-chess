@@ -29,7 +29,8 @@ cc.Class({
         //         this._bar = value;
         //     }
         // },
-        chessAtlas: cc.SpriteAtlas
+        chessAtlas: cc.SpriteAtlas,
+        chessSprite: cc.Sprite,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -41,8 +42,10 @@ cc.Class({
     },
 
     setSpriteFrame(spriteName) {
-        this.node.getComponent(cc.Sprite).spriteFrame = this.chessAtlas.getSpriteFrame(spriteName)
+        this.chessSprite.spriteFrame = this.chessAtlas.getSpriteFrame(spriteName)
     }
+
+
 
     // update (dt) {},
 });

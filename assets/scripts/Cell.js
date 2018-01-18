@@ -32,12 +32,16 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-
+        
     },
-
+    
     start () {
-
+        
     },
+    
+    onEnable() {
+
+    }
 
     // setHighlight() {
     //     console.warn('ahihi')
