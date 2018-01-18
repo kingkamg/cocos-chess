@@ -46,31 +46,33 @@ cc.Class({
     },
 
     _initCells() {
-        let coordinateCell = new Map()
+        let coordinateCell = new Array()
         for (let i = 0; i < 8; i++) {
+            coordinateCell[i] = new Array()
             for (let j = 0; j < 8; j++) {
                 let item = cc.instantiate(this.cell)
                 item.active = true
                 this.node.addChild(item)
-                const {symbolMap} = Model
-                const symbol = symbolMap.get(i)
-                const coordinateUnit = [i, j]
-                const coordinateSymbol = `${symbol}-${j + 1}`
+                // const coordinateUnit = [i, j]
                 let cell = item.getComponent('Cell')
-                cell.coordinateSymbol = coordinateSymbol
-                coordinateCell.set(coordinateUnit, item)
+                const {getSymbol} = Model
+                cell.coordinateSymbol = getSymbol(i, j)
+                coordinateCell[i][j] = item
+                // coordinateCell.set(coordinateUnit, item)
             }
         }
-        this.node.getComponent(cc.Layout).destroy()
+        // this.node.getComponent(cc.Layout).destroy()
         this.coordinateCell = coordinateCell
     },
 
     _initItem() {
         const {coordinateItemModel, itemTypeMap} = Model
-        for (let [coordinate, itemProp] of coordinateItemModel.entries()) {
-            let {type, team} = itemProp
+        for (let iteratorItem of coordinateItemModel) {
+            let {coordinate, type, team} = iteratorItem
+            const {i, j} = coordinate
+
             let chessItem = cc.instantiate(this.item)
-            const position = this.coordinateCell.get(coordinate).getPosition()
+            const position = this.coordinateCell[i][j]
             chessItem.setPosition(position)
             let item = chessItem.getComponent('Item')
             const spriteName = `${itemTypeMap.get(type)}-${team}`

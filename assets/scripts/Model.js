@@ -11,35 +11,43 @@ const itemTypeMap = new Map([[1, 'xe'], [2, 'ma'], [3, 'tinh'], [4, 'hau'], [5, 
 const arrangement = [1, 2, 3, 4, 5, 3, 2, 1]
 
 const getCoordinateItemModel = () => {
-    let coordinateItemModel = new Map()
+    let coordinateItemModel = new Array()
     for (let i = 0; i < 8; i++) {
         const itemTypeBlack = arrangement[i]
         const itemTypeWhite = arrangement.slice().reverse()[i]
-        coordinateItemModel.set(
-            [i, 0],
+        coordinateItemModel.push(
             {
+                coordinate: {
+                    i, j: 0,
+                },
                 type: itemTypeBlack,
                 team: 'den'
             }
         )
-        coordinateItemModel.set(
-            [i, 1],
+        coordinateItemModel.push(
             {
-                type: 'tot',
+                coordinate: {
+                    i, j: 1,
+                },
+                type: 6,
                 team: 'den'
             }
         )
-        coordinateItemModel.set(
-            [i, 6],
+        coordinateItemModel.push(
             {
+                coordinate: {
+                    i, j: 6,
+                },
                 type: itemTypeWhite,
                 team: 'trang'
             }
         )
-        coordinateItemModel.set(
-            [i, 7],
+        coordinateItemModel.push(
             {
-                type: 'tot',
+                coordinate: {
+                    i, j: 7,
+                },
+                type: 6,
                 team: 'trang'
             }
         )
@@ -47,8 +55,13 @@ const getCoordinateItemModel = () => {
     return coordinateItemModel
 }
 
+const getSymbol = (i, j) => {
+    const symbol = getSymbolMap().get(j)
+    const coordinateSymbol = `${symbol}-${i + 1}`
+}
+
 const Model = {
-    symbolMap: getSymbolMap(),
+    getSymbol,
     coordinateItemModel: getCoordinateItemModel(),
     itemTypeMap
 }
