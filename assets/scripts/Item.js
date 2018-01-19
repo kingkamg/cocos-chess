@@ -31,11 +31,13 @@ cc.Class({
         // },
         chessAtlas: cc.SpriteAtlas,
         chessSprite: cc.Sprite,
+        boardNode: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        this.board = this.boardNode.getComponent('Board')
     },
 
     start() {
@@ -43,8 +45,27 @@ cc.Class({
 
     setSpriteFrame(spriteName) {
         this.chessSprite.spriteFrame = this.chessAtlas.getSpriteFrame(spriteName)
-    }
+    },
 
+    onItemClicked() {
+        let { _x, _y } = this
+        this._getHighLightCoordinates(_x, _y)
+        this.board.highlightMove()
+    },
+
+    _getHighLightCoordinates(x, y) {
+        for (let i = -1; i < 2; i++) {
+            for (let j = -1; j < 2; j++) {
+                if (i * j != 0 || i + j === 0) continue
+                let item = this._changeCoordinate(x, y, i, j)
+                this.board.highlightCoordinates.push(item)
+            }
+        }
+    },
+
+    _changeCoordinate(x, y, i, j) {
+        return [x + i, y + j]
+    }
 
 
     // update (dt) {},
