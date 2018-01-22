@@ -39,12 +39,14 @@ cc.Class({
         this.coordinateCell = []
         this.coordinateItem = []
         this.highlightCoordinates = []
+        this.isReadyToMove = false
+        this.chosenItem = null
         this._initCells()
     },
 
     start() {
         setTimeout(() => {
-            // this._initItem()
+            this._initItem()
         }, 600);
     },
 
@@ -59,6 +61,8 @@ cc.Class({
                 item.active = true
                 // const coordinateUnit = [i, j]
                 let cell = item.getComponent('Cell')
+                cell._x = i
+                cell._y = j
                 const { getSymbol } = Model
                 cell.coordinateSymbol = getSymbol(i, j)
                 setTimeout(() => {
@@ -68,7 +72,7 @@ cc.Class({
                 // coordinateCell.set(coordinateUnit, item)
             }
         }
-        console.log('count======',count)
+        console.log('count======', count)
         // this.node.getComponent(cc.Layout).destroy()
     },
 
@@ -103,14 +107,24 @@ cc.Class({
         }
     },
 
-    highlightMove() {
+    moveItem(x, y) {
+        let position = this.coordinateCell[x][y].node.getPosition()
+        this.chosenItem.node.runAction(cc.moveTo(0.2, position))
+        this.chosenItem._x = x
+        this.chosenItem._y = y
+
+        this.toggleHighlightMove(false)
+    },
+
+    toggleHighlightMove(isEnable) {
         let coordinateCell = this.coordinateCell
         this.highlightCoordinates.forEach(point => {
-            let i = point[0]
-            let j = point[1]
-            coordinateCell[i][j].highlightNode.active = true
+            let [i, j] = point
+            if (coordinateCell[i][j]) coordinateCell[i][j].highlightNode.active = isEnable
         })
-    }
+        if (!isEnable) this.highlightCoordinates = []
+
+    },
 
     // update (dt) {},
 });

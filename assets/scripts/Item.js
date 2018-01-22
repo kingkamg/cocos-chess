@@ -48,9 +48,13 @@ cc.Class({
     },
 
     onItemClicked() {
+        this.board.toggleHighlightMove(false)
         let { _x, _y } = this
+        // this._refreshHighlight()
         this._getHighLightCoordinates(_x, _y)
-        this.board.highlightMove()
+        this.board.chosenItem = this
+        this.board.isReadyToMove = true
+        this.board.toggleHighlightMove(true)
     },
 
     _getHighLightCoordinates(x, y) {
@@ -58,13 +62,18 @@ cc.Class({
             for (let j = -1; j < 2; j++) {
                 if (i * j != 0 || i + j === 0) continue
                 let item = this._changeCoordinate(x, y, i, j)
-                this.board.highlightCoordinates.push(item)
+                item && this.board.highlightCoordinates.push(item)
             }
         }
     },
 
     _changeCoordinate(x, y, i, j) {
-        return [x + i, y + j]
+        x += i
+        y += j
+        if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
+            return [x, y]
+        else
+            return null
     }
 
 

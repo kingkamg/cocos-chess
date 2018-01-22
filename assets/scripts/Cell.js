@@ -28,22 +28,32 @@ cc.Class({
         //     }
         // },
         highlightNode: cc.Node,
+        boardNode: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-        
+    onLoad() {
+        this.board = this.boardNode.getComponent('Board')
     },
-    
-    start () {
-        
+
+    start() {
+
     },
-    
+
     onEnable() {
 
-    }
+    },
 
+    onCellClicked() {
+        if (this.board.isReadyToMove) {
+            let { _x, _y } = this
+            let coordinateToMove = this.board.highlightCoordinates.filter(position => 
+                position[0] == _x && position[1] == _y
+            )
+            if(coordinateToMove[0]) this.board.moveItem(_x, _y)
+        }
+    },
     // setHighlight() {
     //     console.warn('ahihi')
     // }
