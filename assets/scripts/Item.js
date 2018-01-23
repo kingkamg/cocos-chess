@@ -51,9 +51,9 @@ cc.Class({
         this.board.toggleHighlightMove(false)
         let { _x, _y } = this
         // this._refreshHighlight()
-        this._getHighLightCoordinates(_x, _y)
         this.board.chosenItem = this
         this.board.isReadyToMove = true
+        this._getHighLightCoordinates(_x, _y)
         this.board.toggleHighlightMove(true)
     },
 
@@ -70,10 +70,23 @@ cc.Class({
     _changeCoordinate(x, y, i, j) {
         x += i
         y += j
-        if (x >= 0 && x <= 7 && y >= 0 && y <= 7)
+        if (!this._checkInsideBoard(x, y)) return null
+        let coordinateItem = this.board.coordinateItems[x][y]
+        let chosenItem = this.board.chosenItem
+        if (this._checkNotDuplicateTeam(chosenItem, coordinateItem))
             return [x, y]
         else
             return null
+    },
+
+    _checkInsideBoard(i, j) {
+        return i >= 0 && i <= 7 && j >= 0 && j <= 7
+    },
+
+    _checkNotDuplicateTeam(item1, item2) {
+        let isValid = true
+        if(item2 && item1.team === item2.team) isValid = false
+        return isValid
     }
 
 

@@ -37,7 +37,7 @@ cc.Class({
 
     onLoad() {
         this.coordinateCell = []
-        this.coordinateItem = []
+        this.coordinateItems = []
         this.highlightCoordinates = []
         this.isReadyToMove = false
         this.chosenItem = null
@@ -80,9 +80,9 @@ cc.Class({
         this.node.getComponent(cc.Layout).destroy()
         const { coordinateItemModel, itemTypeMap } = Model
         for (let i = 0; i < 8; i++) {
-            this.coordinateItem[i] = new Array()
+            this.coordinateItems[i] = new Array()
             for (let j = 0; j < 8; j++) {
-                this.coordinateItem[i][j] = null
+                this.coordinateItems[i][j] = null
             }
         }
         for (let iteratorItem of coordinateItemModel) {
@@ -102,16 +102,21 @@ cc.Class({
             item.type = type
             item.team = team
             setTimeout(() => {
-                this.coordinateItem[i][j] = item
+                this.coordinateItems[i][j] = item
             }, 200);
         }
     },
 
     moveItem(x, y) {
         let position = this.coordinateCell[x][y].node.getPosition()
-        this.chosenItem.node.runAction(cc.moveTo(0.2, position))
-        this.chosenItem._x = x
-        this.chosenItem._y = y
+        let { chosenItem } = this
+        chosenItem.node.runAction(cc.moveTo(0.2, position))
+        let oldX = chosenItem._x
+        let oldY = chosenItem._y
+        chosenItem._x = x
+        chosenItem._y = y
+        this.coordinateItems[oldX][oldY] = null
+        this.coordinateItems[x][y] = chosenItem
 
         this.toggleHighlightMove(false)
     },
