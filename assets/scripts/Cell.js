@@ -48,10 +48,10 @@ cc.Class({
     onCellClicked() {
         if (this.board.isReadyToMove) {
             let { _x, _y } = this
-            let coordinateToMove = this.board.highlightCoordinates.filter(position => 
-                position[0] == _x && position[1] == _y
-            )
-            if(coordinateToMove[0]) this.board.moveItem(_x, _y)
+            if (this.board.checkMovable(_x, _y))
+                this.board.moveItem(_x, _y)
+            else 
+                this.board.handleInvalidMove()
         }
     },
     // setHighlight() {

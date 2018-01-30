@@ -41,6 +41,7 @@ cc.Class({
         this.highlightCoordinates = []
         this.isReadyToMove = false
         this.chosenItem = null
+        this.isWhiteTurn = true
         this._initCells()
     },
 
@@ -116,8 +117,16 @@ cc.Class({
         chosenItem._x = x
         chosenItem._y = y
         this.coordinateItems[oldX][oldY] = null
+        if(this.coordinateItems[x][y]) {
+            this.node.removeChild(this.coordinateItems[x][y].node)
+        }
         this.coordinateItems[x][y] = chosenItem
 
+        this.toggleHighlightMove(false)
+        this.changeTurn()
+    },
+
+    handleInvalidMove() {
         this.toggleHighlightMove(false)
     },
 
@@ -127,9 +136,25 @@ cc.Class({
             let [i, j] = point
             if (coordinateCell[i][j]) coordinateCell[i][j].highlightNode.active = isEnable
         })
-        if (!isEnable) this.highlightCoordinates = []
+        this.isReadyToMove = isEnable
+        if (!isEnable) {
+            this.highlightCoordinates = []
+        }
 
     },
+
+    changeTurn() {
+        this.isWhiteTurn = !this.isWhiteTurn
+    },
+
+    checkMovable(i, j) {
+        let isValid = false
+        let coordinateToMove = this.highlightCoordinates.filter(position =>
+            position[0] == i && position[1] == j
+        )
+        if(coordinateToMove[0]) isValid = true
+        return isValid
+    }
 
     // update (dt) {},
 });

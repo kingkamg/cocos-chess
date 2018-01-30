@@ -38,6 +38,10 @@ cc.Class({
 
     onLoad() {
         this.board = this.boardNode.getComponent('Board')
+        this._x = null
+        this._y = null
+        this.type = null
+        this.team = null
     },
 
     start() {
@@ -48,16 +52,30 @@ cc.Class({
     },
 
     onItemClicked() {
-        this.board.toggleHighlightMove(false)
         let { _x, _y } = this
-        // this._refreshHighlight()
-        this.board.chosenItem = this
-        this.board.isReadyToMove = true
-        this._getHighLightCoordinates(_x, _y)
-        this.board.toggleHighlightMove(true)
+        if (!this.board.checkMovable(_x, _y) && this._checkTrueTurn()) {
+        // if (!this.board.checkMovable(_x, _y)) {
+            this.board.toggleHighlightMove(false)
+            // this._refreshHighlight()
+            this.board.chosenItem = this
+            this.board.isReadyToMove = true
+            this._getHighLightCoordinates()
+            this.board.toggleHighlightMove(true)
+        } else {
+            let cell = this.board.coordinateCell[_x][_y]
+            cell.onCellClicked()
+        }
     },
 
-    _getHighLightCoordinates(x, y) {
+    _checkTrueTurn() {
+        let isValid = true
+        let teamTurn = this.board.isWhiteTurn ? 'trang' : 'den'
+        if(this.team != teamTurn) isValid = false
+        return isValid
+    },
+
+    _getHighLightCoordinates() {
+        let {_x: x, _y: y} = this
         for (let i = -1; i < 2; i++) {
             for (let j = -1; j < 2; j++) {
                 if (i * j != 0 || i + j === 0) continue
@@ -65,6 +83,7 @@ cc.Class({
                 item && this.board.highlightCoordinates.push(item)
             }
         }
+
     },
 
     _changeCoordinate(x, y, i, j) {
@@ -85,7 +104,7 @@ cc.Class({
 
     _checkNotDuplicateTeam(item1, item2) {
         let isValid = true
-        if(item2 && item1.team === item2.team) isValid = false
+        if (item2 && item1.team === item2.team) isValid = false
         return isValid
     }
 

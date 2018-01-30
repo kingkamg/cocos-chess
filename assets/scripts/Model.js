@@ -1,3 +1,5 @@
+import Xe from './Roles/Xe'
+
 const getSymbolMap = () => {
     let symbolMap = new Map()
     let symbolArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -7,7 +9,7 @@ const getSymbolMap = () => {
     return symbolMap
 }
 
-const itemTypeMap = new Map([[1, 'xe'], [2, 'ma'], [3, 'tinh'], [4, 'hau'], [5, 'tuong'], [6, 'tot']])
+const itemTypeMap = new Map([[1, 'xe'], [2, 'ma'], [3, 'tinh'], [4, 'hau'], [5, 'tuong'], [6, 'tot'], [7, 'tot']])
 const arrangement = [1, 2, 3, 4, 5, 3, 2, 1]
 
 const getCoordinateItemModel = () => {
@@ -29,7 +31,7 @@ const getCoordinateItemModel = () => {
                 coordinate: {
                     i, j: 1,
                 },
-                type: 6,
+                type: 7,
                 team: 'den'
             }
         )
@@ -60,10 +62,31 @@ const getSymbol = (i, j) => {
     const coordinateSymbol = `${symbol}-${i + 1}`
 }
 
+const getRole = (itemSelf) => {
+    const {type, team} = itemSelf
+    switch (type) {
+        case 1:
+            return new Xe(itemSelf)
+        case 2:
+            return 
+        case 3:
+            return 
+        case 4:
+            return 
+        case 5:
+            return 
+        case 6:
+            return 
+        case 7:
+            return 
+    }
+}
+
 const Model = {
     getSymbol,
     coordinateItemModel: getCoordinateItemModel(),
-    itemTypeMap
+    itemTypeMap,
+
 }
 
 export default Model
